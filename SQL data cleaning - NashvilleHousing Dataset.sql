@@ -24,14 +24,14 @@ Having count (*) >1
 WITH cte AS(
 	SELECT *,
 		ROW_NUMBER() OVER (PARTITION BY ParcelID, 
-								Updated_SaleDate, 
-								SalePrice, 
-								LegalReference
-							ORDER BY ParcelID, 
-									Updated_SaleDate, 
-									SalePrice, 
-									LegalReference
-							) Row_num
+						Updated_SaleDate, 
+						SalePrice, 
+						LegalReference
+					ORDER BY ParcelID, 
+						Updated_SaleDate, 
+						SalePrice, 
+						LegalReference
+				) Row_num
 	FROM [dbo].[Nashville]
 	)
 	DELETE
@@ -89,9 +89,9 @@ SET Owner_State = PARSENAME(REPLACE ((OwnerAddress),',','.'),1)
 
 UPDATE [dbo].[Nashville]
 SET SoldAsVacant =  CASE WHEN SoldASVacant = 'Yes' THEN 'Y'
-						WHEN SoldASVacant = 'No' THEN 'N'
-						ELSE SoldAsVacant
-					END
+			WHEN SoldASVacant = 'No' THEN 'N'
+			ELSE SoldAsVacant
+		END
 
 --Delete unnecessary data
 
