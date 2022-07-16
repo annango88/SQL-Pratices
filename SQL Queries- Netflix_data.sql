@@ -39,7 +39,6 @@ ADD Converted_Date_Added DATE
 
 UPDATE [dbo].[netflix_data]
 SET Converted_Date_Added = CONVERT (DATE, date_added)
-
 --Split Date_added to Month_added and Year_added
 ALTER TABLE [dbo].[netflix_data]
 ADD Month_added NVARCHAR(20), Year_added INT
@@ -47,14 +46,11 @@ ADD Month_added NVARCHAR(20), Year_added INT
 UPDATE [dbo].[netflix_data]
 SET Month_added = DATENAME(month,Converted_Date_Added),
     Year_Added = YEAR (Converted_Date_Added)
-
 --Getting duration number from Duration column
 ---Create Dur_num column
 ALTER TABLE [dbo].[netflix_data]
 ADD dur_num INT
-
 ---Create get number function
-
 CREATE FUNCTION GetNumber
 (@input varchar (255))
 RETURNS varchar (255)
@@ -74,12 +70,11 @@ END
 UPDATE [dbo].[netflix_data]
 SET dur_num = dbo.GetNumber(duration)
 --split the listed_in value into different rows
-/* Note: The Output will increase the total number of rows in the dataset
-- Specifically, each Show_ID will have several listed_in values record in deferent rows*/
-Select *, value updated_listed_in
-into final_netflix_data
-from [dbo].[netflix_data]
-	cross apply string_split(listed_in,',')
+/* Note: The Output will increase the total number of rows in the dataset. Specifically, each Show_ID will have several listed_in values record in deferent rows*/
+SELECT *, value updated_listed_in
+INTO final_netflix_data
+FROM [dbo].[netflix_data]
+	CROSS APPLY string_split(listed_in,',')
 -- Remove 'TV Shows' and 'Movies' words in Listed_in
 UPDATE final_netflix_data
 SET updated_listed_in = REPLACE(REPLACE(REPLACE(REPLACE(updated_listed_in,'TV Shows',''),' TV ',''),'Movies',''),'TV','')
